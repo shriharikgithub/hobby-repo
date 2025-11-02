@@ -1,21 +1,27 @@
 package com.hobby.projproductservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "productz")
+@Entity
 public class Product extends BaseModel {
     private String title;
-    private double price;
+    private Double price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    // CascadeType.ALL IF something happens to product, do same thing to all categories too
+    // If product is deleted, category is also deleted.
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    // Only save is cascaded if category doesn't exist.
     private Category category;
+
     private String description;
     private String imageUrl;
+
+    private int numberOfSales;
+
 }

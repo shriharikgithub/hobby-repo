@@ -35,20 +35,50 @@ public class MySQLProductService implements ProductService {
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+//        return productRepository.customQuery(0.122, "test");
     }
 
     @Override
     public Product createProduct(Product p) {
-        Optional<Category> optionalCategory =
-                p.getCategory().getId() != null ? categoryRepository.findById(p.getCategory().getId()) :
-                Optional.empty();
-        Category category = null;
-        if (optionalCategory.isEmpty()) {
-            category = categoryRepository.save(p.getCategory());
-        } else {
-            category = optionalCategory.get();
-        }
-        p.setCategory(category);
+//        Category category = p.getCategory();
+//        if (category.getId() == null) {
+//            Category savedCategory = categoryRepository.save(category);
+//            p.setCategory(savedCategory);
+//        }
         return productRepository.save(p);
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product p) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isEmpty()) {
+            throw new RuntimeException();
+        }
+        Product product = optionalProduct.get();
+        if (p.getTitle() != null) {
+            product.setTitle(p.getTitle());
+        }
+        if (p.getDescription() != null) {
+            product.setDescription(p.getDescription());
+        }
+        if (p.getPrice() != null) {
+            product.setPrice(p.getPrice());
+        }
+
+        if (p.getImageUrl() != null) {
+            product.setImageUrl(p.getImageUrl());
+        }
+
+        return productRepository.save(product);
+    }
+
+    @Override
+    public boolean deleteProduct(Long id) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isEmpty()) {
+            return false;
+        }
+        productRepository.deleteById(id);
+        return true;
     }
 }

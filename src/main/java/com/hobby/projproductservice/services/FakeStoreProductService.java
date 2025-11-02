@@ -90,4 +90,14 @@ public class FakeStoreProductService implements ProductService {
         responseProduct.setId(responseFakeStoreProducDto.getId());
         return responseProduct;
     }
+
+    @Override
+    public Product updateProduct(Long id, Product p) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteProduct(Long id) {
+        return false;
+    }
 }
