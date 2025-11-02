@@ -38,6 +38,9 @@ dependencies {
     implementation 'org.flywaydb:flyway-core:11.15.0'
     // https://mvnrepository.com/artifact/org.flywaydb/flyway-mysql
     implementation 'org.flywaydb:flyway-mysql:11.15.0'
+
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
+    testImplementation 'org.assertj:assertj-core:3.27.6'
 }
 
 tasks.named('test') {

@@ -21,9 +21,9 @@ class ProjProductServiceApplicationTests {
         this.productRepository = productRepository;
     }
 
-    @Test
-    void contextLoads() {
-    }
+//    @Test
+//    void contextLoads() {
+//    }
 
     @Test
     @Transactional
