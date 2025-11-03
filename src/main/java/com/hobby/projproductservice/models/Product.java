@@ -1,5 +1,7 @@
 package com.hobby.projproductservice.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +18,8 @@ public class Product extends BaseModel {
     // If product is deleted, category is also deleted.
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    @JsonBackReference
     // Only save is cascaded if category doesn't exist.
     private Category category;
 
