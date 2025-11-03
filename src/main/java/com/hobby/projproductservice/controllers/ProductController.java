@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,22 +31,22 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<GetAllProductsResponseDto> getAllProducts(@RequestHeader("AuthenticationToken") String token) {
+    public ResponseEntity<GetAllProductsResponseDto> getAllProducts() {
         GetAllProductsResponseDto response = new GetAllProductsResponseDto();
 
-        ValidateTokenResponseDto validateTokenResponseDto = authenticationCommons.validateToken(token);
-        if (validateTokenResponseDto.getResponseStatus().equals(ResponseStatus.FAILURE)) {
-            response.setResponseStatus(ResponseStatus.FAILURE);
-            response.setMessage("This endpoint is forbidden to be used by this user.");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-        }
-        boolean isAdmin = validateTokenResponseDto.getRoles().stream().anyMatch(roleDto -> roleDto.getName().equalsIgnoreCase("admin"));
-
-        if (!isAdmin) {
-            response.setResponseStatus(ResponseStatus.FAILURE);
-            response.setMessage("Invalid token, You are not authorized to access this endpoint.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
+//        ValidateTokenResponseDto validateTokenResponseDto = authenticationCommons.validateToken(token);
+//        if (validateTokenResponseDto.getResponseStatus().equals(ResponseStatus.FAILURE)) {
+//            response.setResponseStatus(ResponseStatus.FAILURE);
+//            response.setMessage("This endpoint is forbidden to be used by this user.");
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+//        }
+//        boolean isAdmin = validateTokenResponseDto.getRoles().stream().anyMatch(roleDto -> roleDto.getName().equalsIgnoreCase("admin"));
+//
+//        if (!isAdmin) {
+//            response.setResponseStatus(ResponseStatus.FAILURE);
+//            response.setMessage("Invalid token, You are not authorized to access this endpoint.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+//        }
 
         List<Product> products = productService.getAllProducts();
         response.setMessage("Fetched all products successfully");

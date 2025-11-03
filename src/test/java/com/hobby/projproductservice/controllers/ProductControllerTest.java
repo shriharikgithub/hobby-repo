@@ -60,7 +60,7 @@ class ProductControllerTest {
                 productList
         );
         // Act
-        ResponseEntity<?> responseEntityProductList = productController.getAllProducts("");
+//        ResponseEntity<?> responseEntityProductList = productController.getAllProducts("");
 //        List<Product> products = responseEntityProductList.getBody();
 
         // Assert
