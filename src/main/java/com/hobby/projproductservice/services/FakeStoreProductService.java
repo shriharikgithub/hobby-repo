@@ -4,25 +4,35 @@ import com.hobby.projproductservice.models.Category;
 import com.hobby.projproductservice.models.Product;
 import com.hobby.projproductservice.dtos.fakestore.FakeStoreProducDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FakeStoreProductService implements ProductService {
 
     private final RestTemplate restTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate, RedisTemplate redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
     public Product getSingleProduct(Long id) throws ProductNotFoundException {
+
+        Product redisProduct = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + id);
+        if (redisProduct != null) {
+            return redisProduct;
+        }
+
         FakeStoreProducDto fakeStoreProduct = restTemplate.getForObject("https://fakestoreapi.com/products/" + id, FakeStoreProducDto.class);
         if (fakeStoreProduct == null) {
             throw new ProductNotFoundException();
@@ -36,6 +46,9 @@ public class FakeStoreProductService implements ProductService {
         c.setName(fakeStoreProduct.getCategory());
         product.setCategory(c);
         product.setImageUrl(fakeStoreProduct.getImage());
+
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id, product);
+
         return product;
     }
 
